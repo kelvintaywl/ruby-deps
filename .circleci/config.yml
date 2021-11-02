@@ -1,17 +1,72 @@
 version: 2.1
 
-jobs:
-  echo:
-    docker:
-      - image: cimg/base:stable
+commands:
+  save_gem_cache:
+    steps:
+      - save_cache:
+          key: v20211013001-bundle-{{ checksum "Gemfile.lock" }}
+          paths:
+            - ~/vendor/bundle
+
+  bundle_install:
+    steps:
+      - restore_cache:
+          keys:
+            - v1-bundle-{{ checksum "Gemfile.lock" }}
+            - v1-bundle-
+      - run:
+          command: |
+            bundle config set clean 'true'
+            bundle install --jobs=4 --path=~/vendor/bundle
+
+  checkout_code:
     steps:
       - run:
-          name: Greet
-          command: echo "I love ${COLOR} builds."
-          environment:
-            COLOR: "green"
+          command: |
+            mkdir -p ~/.ssh
+            ssh-keyscan -H github.com >> ~/.ssh/known_hosts
+            ssh-keyscan -H bitbucket.org >> ~/.ssh/known_hosts
+
+            if [ "${HOME}" = "/" ]
+            then
+              export HOME=$(getent passwd $(id -un) | cut -d: -f6)
+            fi
+            git config --global gc.auto 0 || true
+
+            # Checkout
+            git clone --depth=1 --branch ${CIRCLE_BRANCH} --single-branch ${CIRCLE_REPOSITORY_URL} .
+
+            # Check the commit ID of the checked out code
+            git reset --hard ${CIRCLE_SHA1}
+
+jobs:
+  build:
+    working_directory: ~/workspace
+
+    docker:
+      - image: taka0125/circleci-ruby:2.6.3-node-2.1.2
+        environment:
+          LANG: ja_JP.UTF-8
+          RAILS_ENV: test
+          APP_STAGE: circleci
+          PARALLEL_TEST_PROCESSORS: 4
+          RUBYOPT: -EUTF-8
+          CIRCLE_ARTIFACTS: /tmp/circleci-artifacts
+    resource_class: medium
+    steps:
+      - checkout_code
+      - bundle_install
+      - save_gem_cache
+      - run:
+          command: |
+            git log --pretty=format:"%B" -1 > ~/workspace/commit_message.txt
+      - persist_to_workspace:
+          root: ~/workspace
+          paths:
+            - commit_message.txt
 
 workflows:
+  version: 2
   main:
     jobs:
-      - echo
+      - build
