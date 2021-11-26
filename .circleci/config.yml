@@ -48,13 +48,13 @@ jobs:
     working_directory: ~/workspace
     docker:
       - image: << parameters.img >>
-        environment:
-          LANG: ja_JP.UTF-8
-          RAILS_ENV: test
-          APP_STAGE: circleci
-          PARALLEL_TEST_PROCESSORS: 4
-          RUBYOPT: -EUTF-8
-          CIRCLE_ARTIFACTS: /tmp/circleci-artifacts
+#         environment:
+#           LANG: ja_JP.UTF-8
+#           RAILS_ENV: test
+#           APP_STAGE: circleci
+#           PARALLEL_TEST_PROCESSORS: 4
+#           RUBYOPT: -EUTF-8
+#           CIRCLE_ARTIFACTS: /tmp/circleci-artifacts
     steps:
       - run:
           name: download cache
