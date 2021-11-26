@@ -69,7 +69,7 @@ jobs:
     working_directory: ~/workspace
 
     docker:
-      - image: taka0125/circleci-ruby:2.6.3-node-2.1.2
+      - image: cimg/ruby:2.6-node
         environment:
           LANG: ja_JP.UTF-8
           RAILS_ENV: test
@@ -80,26 +80,19 @@ jobs:
     resource_class: medium
     steps:
       - checkout
+      - run: bundle --version
       - bundle_install
-      - save_gem_cache
-      - run:
-          command: |
-            git log --pretty=format:"%B" -1 > ~/workspace/commit_message.txt
-      - persist_to_workspace:
-          root: ~/workspace
-          paths:
-            - commit_message.txt
 
 workflows:
   version: 2
   main:
     jobs:
       - build
-      - untar:
-          matrix:
-            parameters:
-              img:
-                - "taka0125/circleci-ruby:2.6.3-node-2.1.2"
-                - "circleci/ruby:2.6.3"
-                - "cimg/ruby:2.6.3"
+#       - untar:
+#           matrix:
+#             parameters:
+#               img:
+#                 - "taka0125/circleci-ruby:2.6.3-node-2.1.2"
+#                 - "circleci/ruby:2.6.3"
+#                 - "cimg/ruby:2.6.3"
 
