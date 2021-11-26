@@ -12,8 +12,8 @@ commands:
     steps:
       - restore_cache:
           keys:
-            - v1-bundle-{{ checksum "Gemfile.lock" }}
-            - v1-bundle-
+            - v20211013001-bundle-{{ checksum "Gemfile.lock" }}
+            - v20211013001-bundle-
       - run:
           command: |
             bundle config set clean 'true'
