@@ -79,7 +79,7 @@ jobs:
           CIRCLE_ARTIFACTS: /tmp/circleci-artifacts
     resource_class: medium
     steps:
-      - checkout_code
+      - checkout
       - bundle_install
       - save_gem_cache
       - run:
@@ -94,6 +94,7 @@ workflows:
   version: 2
   main:
     jobs:
+      - build
       - untar:
           matrix:
             parameters:
