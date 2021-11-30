@@ -1,3 +1,9 @@
+GIT
+  remote: https://github.com/kelvintaywl/jsonresume.git
+  revision: 7d40d1dab77faca109b6381687e675e2f5a5408f
+  specs:
+    jsonresume (0.0.1)
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -26,6 +32,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  jsonresume (~> 0.0.1)!
   rubocop (~> 1.22)
 
 BUNDLED WITH
