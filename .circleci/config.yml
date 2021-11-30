@@ -86,7 +86,7 @@ jobs:
       - run:
           name: zip Ruby deps
           command: |
-            tar -zcvf deps.tar.gz vendor
+            tar -zcvf deps.tar.gz ~/vendor
       - store_artifacts:
           path: deps.tar.gz
 
