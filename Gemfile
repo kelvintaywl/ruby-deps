@@ -8,3 +8,4 @@ git_source(:github) {|repo_name| "https://github.com/kelvintaywl/ruby-deps" }
 
 gem "rubocop", "~> 1.22"
 gem 'jsonresume', '~> 0.0.1', git: "https://github.com/kelvintaywl/jsonresume.git"
+gem "pry-doc", "1.2.0"
