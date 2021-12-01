@@ -1,6 +1,6 @@
 # Ruby Deps Exploration
 
-This is to explore using a custom Ruby image.
+This is to explore using a custom Ruby image!
 
 ## Inspecting an image's bundler version
 
